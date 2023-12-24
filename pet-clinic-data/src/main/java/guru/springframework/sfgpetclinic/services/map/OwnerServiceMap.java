@@ -5,7 +5,6 @@ import guru.springframework.sfgpetclinic.services.OwnerService;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -15,13 +14,9 @@ import java.util.stream.Collectors;
 @Service
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
 
-    private final AtomicLong generator = new AtomicLong(1L);
 
     public Owner save(Owner owner) {
-        if (owner.getId() == null){
-            owner.setId(generator.getAndIncrement());
-        }
-        return super.save(owner.getId(), owner);
+        return super.save(owner);
     }
 
     @Override

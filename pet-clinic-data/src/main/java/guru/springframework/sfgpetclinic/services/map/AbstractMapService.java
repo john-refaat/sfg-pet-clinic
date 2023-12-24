@@ -1,21 +1,27 @@
 package guru.springframework.sfgpetclinic.services.map;
 
+import guru.springframework.sfgpetclinic.model.BaseEntity;
 import guru.springframework.sfgpetclinic.services.CrudService;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author john
  * @since 18/12/2023
  */
-public abstract class AbstractMapService<T, ID> implements CrudService<T, ID> {
-    protected Map<ID, T> map = new HashMap<>();
+public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> implements CrudService<T, ID> {
+    protected Map<Long, T> map = new HashMap<>();
+    private final AtomicLong generator = new AtomicLong(1L);
 
-    public T save(ID id, T object) {
-        map.put(id, object);
+    public T save(T object) {
+        if (object.getId() == null){
+            object.setId(generator.getAndIncrement());
+        }
+        map.put(object.getId(), object);
         return object;
     }
 
