@@ -1,6 +1,7 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.model.Pet;
 import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.model.Vet;
 import guru.springframework.sfgpetclinic.services.OwnerService;
@@ -8,6 +9,8 @@ import guru.springframework.sfgpetclinic.services.PetTypeService;
 import guru.springframework.sfgpetclinic.services.VetService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 /**
  * @author john
@@ -28,18 +31,52 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Owner owner1 = new Owner();
-        owner1.setFirstName("Michael");
-        owner1.setLastName("Weston");
-        ownerService.save(owner1);
+        //Pet Types
+        PetType cat = new PetType();
+        cat.setName("Cat");
+        PetType savedCatPetType = petTypeService.save(cat);
 
-        Owner owner2 = new Owner();
-        owner2.setFirstName("Fiona");
-        owner2.setLastName("Glenanne");
-        ownerService.save(owner2);
+        PetType dog = new PetType();
+        dog.setName("Dog");
+        PetType savedDogPetType = petTypeService.save(dog);
+
+        System.out.println("Pet Types Loaded...");
+
+        //Owners
+        Owner mike = new Owner();
+        mike.setFirstName("Michael");
+        mike.setLastName("Weston");
+        mike.setAddress("Madinaty");
+        mike.setCity("Cairo");
+        mike.setTelephone("1233344567");
+
+        Pet rosco = new Pet();
+        rosco.setName("Rosco");
+        rosco.setType(savedDogPetType);
+        rosco.setBirthDate(LocalDate.now());
+        rosco.setOwner(mike);
+        mike.getPets().add(rosco);
+        ownerService.save(mike);
+
+        Owner fiona = new Owner();
+        fiona.setFirstName("Fiona");
+        fiona.setLastName("Glenanne");
+        mike.setAddress("Madinaty");
+        mike.setCity("Cairo");
+        mike.setTelephone("88775554431");
+
+
+        Pet spock = new Pet();
+        spock.setName("Spock");
+        spock.setType(savedCatPetType);
+        spock.setBirthDate(LocalDate.now());
+        spock.setOwner(fiona);
+        fiona.getPets().add(spock);
+        ownerService.save(fiona);
 
         System.out.println("Owners Loaded...");
 
+        //Vets
         Vet vet1 = new Vet();
         vet1.setFirstName("Sam");
         vet1.setLastName("Axe");
@@ -52,14 +89,13 @@ public class DataLoader implements CommandLineRunner {
 
         System.out.println("Vets Loaded...");
 
-        PetType cat = new PetType();
-        cat.setName("Cat");
-        PetType savedCatPetType = petTypeService.save(cat);
 
-        PetType dog = new PetType();
-        dog.setName("Dog");
-        PetType savedDogPetType = petTypeService.save(dog);
 
-        System.out.println("Pet Types Loaded...");
+
+
+
+
+
+
     }
 }
