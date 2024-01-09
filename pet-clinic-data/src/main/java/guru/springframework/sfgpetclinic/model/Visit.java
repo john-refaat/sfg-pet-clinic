@@ -1,5 +1,7 @@
 package guru.springframework.sfgpetclinic.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -8,16 +10,17 @@ import java.time.LocalDate;
  * @since 30/12/2023
  */
 @Entity
-@Table(name = "name")
+@Table(name = "visits")
 public class Visit extends BaseEntity {
 
     @Column(name = "date")
+    @DateTimeFormat(pattern = "dd-MM-YYYY hh:mm:ss")
     private LocalDate date;
 
     @Column(name = "description")
     private String description;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
