@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
  * @since 18/12/2023
  */
 @Service
-public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
+public class OwnerMapService extends AbstractMapService<Owner, Long> implements OwnerService {
 
     private final PetService petService;
 
-    public OwnerServiceMap(PetService petService) {
+    public OwnerMapService(PetService petService) {
         this.petService = petService;
     }
 
