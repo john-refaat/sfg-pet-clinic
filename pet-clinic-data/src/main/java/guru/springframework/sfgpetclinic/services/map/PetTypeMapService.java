@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
  * @since 30/12/2023
  */
 @Service
-public class PetTypeServiceMap extends AbstractMapService<PetType, Long> implements PetTypeService {
+public class PetTypeMapService extends AbstractMapService<PetType, Long> implements PetTypeService {
 
 }

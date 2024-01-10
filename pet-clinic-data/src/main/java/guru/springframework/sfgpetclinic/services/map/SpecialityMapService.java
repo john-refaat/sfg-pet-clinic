@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * @since 02/01/2024
  */
 @Service
-public class SpecialityServiceMap extends AbstractMapService<Speciality, Long> implements SpecialityService {
+public class SpecialityMapService extends AbstractMapService<Speciality, Long> implements SpecialityService {
 
 
 }
