@@ -37,7 +37,6 @@ public class Pet extends BaseEntity {
                 ", type=" + type +
                 ", owner=" + owner +
                 ", birthDate=" + birthDate +
-                ", #visits=" + visits.size() +
                 '}';
     }
 

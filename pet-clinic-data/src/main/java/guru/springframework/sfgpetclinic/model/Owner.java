@@ -30,7 +30,6 @@ public class Owner extends Person {
                 "address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", telephone='" + telephone + '\'' +
-                ", #pets=" + pets.size() +
                 '}';
     }
 
