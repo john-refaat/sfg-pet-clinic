@@ -1,10 +1,7 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.*;
-import guru.springframework.sfgpetclinic.services.OwnerService;
-import guru.springframework.sfgpetclinic.services.PetTypeService;
-import guru.springframework.sfgpetclinic.services.SpecialityService;
-import guru.springframework.sfgpetclinic.services.VetService;
+import guru.springframework.sfgpetclinic.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +18,14 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final SpecialityService specialityService;
+    private final VisitService visitService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService, VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialityService = specialityService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -68,9 +67,9 @@ public class DataLoader implements CommandLineRunner {
         Owner fiona = new Owner();
         fiona.setFirstName("Fiona");
         fiona.setLastName("Glenanne");
-        mike.setAddress("Madinaty");
-        mike.setCity("Cairo");
-        mike.setTelephone("88775554431");
+        fiona.setAddress("Madinaty");
+        fiona.setCity("Cairo");
+        fiona.setTelephone("88775554431");
 
 
         Pet spock = new Pet();
@@ -108,5 +107,14 @@ public class DataLoader implements CommandLineRunner {
         vetService.save(vet2);
 
         System.out.println("Vets Loaded...");
+
+        Visit catVisit = new Visit();
+        catVisit.setPet(spock);
+        catVisit.setDate(LocalDate.now());
+        catVisit.setDescription("Sneezy Kitty");
+        visitService.save(catVisit);
+        System.out.println("Visit Loaded");
+
+        System.out.println(visitService.findAll());
     }
 }

@@ -24,6 +24,16 @@ public class Owner extends Person {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private Set<Pet> pets = new HashSet<>();
 
+    @Override
+    public String toString() {
+        return "Owner{" +
+                "address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", #pets=" + pets.size() +
+                '}';
+    }
+
     public String getAddress() {
         return address;
     }
