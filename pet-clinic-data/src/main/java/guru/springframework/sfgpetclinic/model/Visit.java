@@ -24,6 +24,15 @@ public class Visit extends BaseEntity {
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
+    @Override
+    public String toString() {
+        return "Visit{" +
+                "date=" + date +
+                ", description='" + description + '\'' +
+                ", pet=" + pet +
+                '}';
+    }
+
     public LocalDate getDate() {
         return date;
     }
@@ -45,6 +54,7 @@ public class Visit extends BaseEntity {
     }
 
     public void setPet(Pet pet) {
+        pet.addVisit(this);
         this.pet = pet;
     }
 }
