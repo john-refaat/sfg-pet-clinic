@@ -1,5 +1,6 @@
 package guru.springframework.sfgpetclinic.model;
 
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -9,14 +10,21 @@ import java.time.LocalDate;
  * @author john
  * @since 30/12/2023
  */
+@Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"pet"}, callSuper = true)
 @Table(name = "visits")
 public class Visit extends BaseEntity {
 
+    @Setter
     @Column(name = "date")
     @DateTimeFormat(pattern = "dd-MM-YYYY hh:mm:ss")
     private LocalDate date;
 
+    @Setter
     @Column(name = "description")
     private String description;
 
@@ -31,26 +39,6 @@ public class Visit extends BaseEntity {
                 ", description='" + description + '\'' +
                 ", pet=" + pet +
                 '}';
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Pet getPet() {
-        return pet;
     }
 
     public void setPet(Pet pet) {
