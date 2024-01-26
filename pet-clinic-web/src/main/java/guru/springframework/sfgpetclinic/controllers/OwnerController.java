@@ -22,7 +22,7 @@ public class OwnerController {
     @RequestMapping({"", "/", "/index"})
     public String listOwners(Model model) {
         model.addAttribute("owners", ownerService.findAll());
-        return "owners/index";
+            return "owners/index";
     }
 
     @RequestMapping("find")
