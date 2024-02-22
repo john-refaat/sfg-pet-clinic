@@ -6,6 +6,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -38,10 +39,8 @@ class OwnerControllerTest {
     @BeforeEach
     void setUp() {
         owners = new HashSet<>();
-        Owner owner1 = Owner.builder().build();
-        owner1.setId(1L);
-        Owner owner2 = Owner.builder().build();
-        owner2.setId(2L);
+        Owner owner1 = Owner.builder().id(1L).build();
+        Owner owner2 = Owner.builder().id(2L).build();
 
         owners.add(owner1);
         owners.add(owner2);
@@ -75,5 +74,17 @@ class OwnerControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("notImplemented"));
         Mockito.verifyNoInteractions(ownerService);
+    }
+
+    @Test
+    void displayOwner() throws Exception {
+        Owner owner = Owner.builder().id(1L).build();
+        Mockito.when(ownerService.findById(ArgumentMatchers.anyLong())).thenReturn(owner);
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/1"))
+               .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("owner"))
+                .andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.notNullValue()))
+                .andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.hasProperty("id", Matchers.is(1L))))
+               .andExpect(MockMvcResultMatchers.view().name("owners/ownerDetails"));
     }
 }
