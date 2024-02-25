@@ -11,4 +11,6 @@ import java.util.Set;
  */
 public interface OwnerRepository extends CrudRepository<Owner, Long> {
     Set<Owner> findByLastName(String name);
+
+    Set<Owner> findByLastNameContainsIgnoreCase(String name);
 }

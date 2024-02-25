@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Find Owners</title>
+</head>
+<body>
+    <h1>Find Owners</h1>
+    <form th:action="@{/owners/searchResults}" method="GET" th:object="${owner}" class="form-horizontal" id="search-owner-form">
+        <div class="form-group">
+            <div class="control-group">
+                <label for="lastName" class="col-sm-2 control-label">Last Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name"
+                           th:field="*{lastName}" size="30" maxlength="80 /">
+                    <span class="help-inline">
+                        <div th:if="${#fields.hasAnyErrors()}">
+                            <p th:each="err : ${#fields.allErrors()}" th:text="${err}">Error</p>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Find Owner</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

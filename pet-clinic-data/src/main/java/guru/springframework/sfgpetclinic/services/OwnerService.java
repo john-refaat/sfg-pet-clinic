@@ -10,4 +10,5 @@ import java.util.Set;
  */
 public interface OwnerService extends CrudService<Owner, Long> {
     Set<Owner> findByLastName(String name);
+    Set<Owner> findByLastNameContainsIgnoreCase(String name);
 }

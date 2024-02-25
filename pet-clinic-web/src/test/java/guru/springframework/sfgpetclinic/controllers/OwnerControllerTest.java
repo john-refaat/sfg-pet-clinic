@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,8 +73,38 @@ class OwnerControllerTest {
     void findOwners() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/owners/find"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("notImplemented"));
+                .andExpect(MockMvcResultMatchers.view().name("owners/findOwners"));
         Mockito.verifyNoInteractions(ownerService);
+    }
+
+    @Test
+    void processFindFormReturnMany() throws Exception {
+        Mockito.when(ownerService.findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString())).thenReturn(owners);
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/searchResults"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("selection"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("owners/ownersList"));
+        Mockito.verify(ownerService, Mockito.times(1)).findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString());
+    }
+
+    @Test
+    void processFindFormReturnOne() throws Exception {
+        Mockito.when(ownerService.findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString())).thenReturn(Collections.singleton(Owner.builder().id(1L).build()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/searchResults"))
+               .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("selection"))
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
+        Mockito.verify(ownerService, Mockito.times(1)).findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString());
+    }
+
+    @Test
+    void processFindFormReturnEmpty() throws Exception {
+        Mockito.when(ownerService.findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString())).thenReturn(Collections.emptySet());
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/searchResults"))
+              .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("selection"))
+              .andExpect(MockMvcResultMatchers.status().isOk())
+              .andExpect(MockMvcResultMatchers.view().name("owners/findOwners"));
+        Mockito.verify(ownerService, Mockito.times(1)).findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString());
     }
 
     @Test

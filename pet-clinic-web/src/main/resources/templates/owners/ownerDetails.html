@@ -53,8 +53,8 @@
                     </thead>
                     <tbody>
                     <tr th:each="visit: ${pet.visits}">
-                        <td th:text="${visit.visitDate}">Visit Date...</td>
-                        <td th:text="${visit.description}">Description...</td>
+                        <td th:text="${visit?.date}">Visit Date...</td>
+                        <td th:text="${visit?.description}">Description...</td>
                     </tr>
                     <tr>
                         <td><a th:href="@{__${owner.id}__/pets/__${pet.id}__/edit}">Edit Pet</a></td>

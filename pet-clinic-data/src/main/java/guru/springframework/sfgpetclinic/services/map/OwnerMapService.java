@@ -51,4 +51,11 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
                 .filter(value -> value.getLastName().equalsIgnoreCase(name))
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public Set<Owner> findByLastNameContainsIgnoreCase(String name) {
+        return map.values().stream()
+                .filter(value -> value.getLastName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toSet());
+    }
 }
