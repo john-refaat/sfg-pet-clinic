@@ -91,9 +91,9 @@ class OwnerControllerTest {
     void processFindFormReturnOne() throws Exception {
         Mockito.when(ownerService.findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString())).thenReturn(Collections.singleton(Owner.builder().id(1L).build()));
         mockMvc.perform(MockMvcRequestBuilders.get("/owners/searchResults"))
-               .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("selection"))
-               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-               .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
+                .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("selection"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
         Mockito.verify(ownerService, Mockito.times(1)).findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString());
     }
 
@@ -101,9 +101,9 @@ class OwnerControllerTest {
     void processFindFormReturnEmpty() throws Exception {
         Mockito.when(ownerService.findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString())).thenReturn(Collections.emptySet());
         mockMvc.perform(MockMvcRequestBuilders.get("/owners/searchResults"))
-              .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("selection"))
-              .andExpect(MockMvcResultMatchers.status().isOk())
-              .andExpect(MockMvcResultMatchers.view().name("owners/findOwners"));
+                .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("selection"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("owners/findOwners"));
         Mockito.verify(ownerService, Mockito.times(1)).findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString());
     }
 
@@ -112,10 +112,64 @@ class OwnerControllerTest {
         Owner owner = Owner.builder().id(1L).build();
         Mockito.when(ownerService.findById(ArgumentMatchers.anyLong())).thenReturn(owner);
         mockMvc.perform(MockMvcRequestBuilders.get("/owners/1"))
-               .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attributeExists("owner"))
                 .andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.notNullValue()))
                 .andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.hasProperty("id", Matchers.is(1L))))
-               .andExpect(MockMvcResultMatchers.view().name("owners/ownerDetails"));
+                .andExpect(MockMvcResultMatchers.view().name("owners/ownerDetails"));
+    }
+
+    @Test
+    void initCreateForm() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/create"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("owner"))
+                .andExpect(MockMvcResultMatchers.view().name("owners/ownerForm"));
+    }
+
+    @Test
+    void procesCreateForm() throws Exception {
+        //Given
+        Owner owner = Owner.builder().id(1L).build();
+
+        Mockito.when(ownerService.save(ArgumentMatchers.any())).thenReturn(owner);
+        //When
+        mockMvc.perform(MockMvcRequestBuilders.post("/owners/create"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
+
+        //Then
+        Mockito.verify(ownerService, Mockito.times(1)).save(ArgumentMatchers.any(Owner.class));
+    }
+
+    @Test
+    void initUpdateForm() throws Exception {
+        // Given
+        Owner owner = Owner.builder().id(1L).build();
+
+        Mockito.when(ownerService.findById(ArgumentMatchers.anyLong())).thenReturn(owner);
+        // When
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/1/update"))
+              .andExpect(MockMvcResultMatchers.status().isOk())
+              .andExpect(MockMvcResultMatchers.model().attributeExists("owner"))
+              .andExpect(MockMvcResultMatchers.view().name("owners/ownerForm"));
+
+        //Then
+        Mockito.verify(ownerService, Mockito.times(1)).findById(ArgumentMatchers.anyLong());
+    }
+
+    @Test
+    void processUpdateForm() throws Exception {
+        //Given
+        Owner owner = Owner.builder().id(1L).build();
+
+        Mockito.when(ownerService.save(ArgumentMatchers.any())).thenReturn(owner);
+        //When
+        mockMvc.perform(MockMvcRequestBuilders.post("/owners/1/update"))
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
+
+        //Then
+        Mockito.verify(ownerService, Mockito.times(1)).save(ArgumentMatchers.any(Owner.class));
     }
 }
