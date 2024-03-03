@@ -1,6 +1,7 @@
 package guru.springframework.sfgpetclinic.model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -20,7 +21,8 @@ import java.util.Set;
 public class Pet extends BaseEntity {
 
     @Builder
-    public Pet(String name, PetType type, Owner owner, LocalDate birthDate) {
+    public Pet(Long id, String name, PetType type, Owner owner, LocalDate birthDate) {
+        super(id);
         this.name = name;
         this.type = type;
         this.owner = owner;
@@ -39,6 +41,7 @@ public class Pet extends BaseEntity {
     private Owner owner;
 
     @Column(name = "birth_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")

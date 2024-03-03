@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -35,7 +36,7 @@ public class Owner extends Person {
     @Column(name="telephone")
     private String telephone;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.EAGER)
     private Set<Pet> pets = new HashSet<>();
 
     public Owner addPet(Pet pet) {
@@ -44,6 +45,14 @@ public class Owner extends Person {
         return this;
     }
 
+
+    /**
+     * @param name the name of the pet
+     * @return Optional Pet with the given name
+     */
+    public Optional<Pet> findPetByNameIgnoreNew(String name) {
+        return pets.stream().filter(pet -> !pet.isNew() && pet.getName().equalsIgnoreCase(name)).findFirst();
+    }
 
     @Override
     public String toString() {

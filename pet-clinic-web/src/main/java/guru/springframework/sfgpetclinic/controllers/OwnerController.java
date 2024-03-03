@@ -56,7 +56,7 @@ public class OwnerController {
             owner = results.iterator().next();
             return "redirect:/owners/" + owner.getId();
         } else {
-            // Multiple Owners Founds
+            // Mult iple Owners Founds
             model.addAttribute("selection", results);
             return "owners/ownersList";
         }
