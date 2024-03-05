@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author john
@@ -87,10 +88,11 @@ public class DataLoader implements CommandLineRunner {
 
         System.out.println("Vets Loaded...");
 
-        Visit catVisit = Visit.builder().date(LocalDate.now()).pet(spock).description("Sneezy Kitty").build();
-        visitService.save(catVisit);
+        Visit catVisit = Visit.builder().date(LocalDateTime.now()).description("Sneezy Kitty").build();
+        spock.addVisit(catVisit);
+        Visit savedVisit = visitService.save(catVisit);
         System.out.println("Visit Loaded");
-
+        System.out.println(savedVisit);
         System.out.println(visitService.findAll());
     }
 }

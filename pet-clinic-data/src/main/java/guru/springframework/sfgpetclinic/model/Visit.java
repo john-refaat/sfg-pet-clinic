@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author john
@@ -13,16 +13,21 @@ import java.time.LocalDate;
 @Getter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @EqualsAndHashCode(exclude = {"pet"}, callSuper = true)
 @Table(name = "visits")
 public class Visit extends BaseEntity {
 
+    @Builder
+    public Visit(Long id, LocalDateTime date, String description) {
+        super(id);
+        this.date = date;
+        this.description = description;
+    }
+
     @Setter
-    @Column(name = "date")
-    @DateTimeFormat(pattern = "dd-MM-YYYY hh:mm:ss")
-    private LocalDate date;
+    @Column(name = "date", columnDefinition = "TIMESTAMP")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm")
+    private LocalDateTime date;
 
     @Setter
     @Column(name = "description")
@@ -42,7 +47,6 @@ public class Visit extends BaseEntity {
     }
 
     public void setPet(Pet pet) {
-        pet.addVisit(this);
         this.pet = pet;
     }
 }
