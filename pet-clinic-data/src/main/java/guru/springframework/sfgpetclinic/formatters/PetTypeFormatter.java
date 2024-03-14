@@ -12,7 +12,7 @@ import java.util.Locale;
  * @since 29/02/2024
  */
 @Component
-public class PetTypeFormater implements Formatter<PetType> {
+public class PetTypeFormatter implements Formatter<PetType> {
     @Override
     public PetType parse(String text, Locale locale) throws ParseException {
         // Assuming the String format is like: {id='1', name='Cat'}

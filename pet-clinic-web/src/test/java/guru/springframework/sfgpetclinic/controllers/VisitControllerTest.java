@@ -45,7 +45,7 @@ class VisitControllerTest {
         //When
         Mockito.when(petService.findById(ArgumentMatchers.anyLong())).thenReturn(pet);
         //Then
-        mvc.perform(MockMvcRequestBuilders.get("/owners/1/pets/1/visit/new"))
+        mvc.perform(MockMvcRequestBuilders.get("/owners/1/pets/1/visits/new"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("visit"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("pets/createOrUpdateVisitForm"));
@@ -61,7 +61,7 @@ class VisitControllerTest {
         Mockito.when(petService.findById(ArgumentMatchers.anyLong())).thenReturn(pet);
         Mockito.when(visitService.save(ArgumentMatchers.any(Visit.class))).thenReturn(visit);
         //Then
-        mvc.perform(MockMvcRequestBuilders.post("/owners/1/pets/1/visit/new"))
+        mvc.perform(MockMvcRequestBuilders.post("/owners/1/pets/1/visits/new"))
                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
 

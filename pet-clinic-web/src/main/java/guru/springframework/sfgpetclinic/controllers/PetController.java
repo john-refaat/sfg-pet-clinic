@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -84,15 +85,19 @@ public class PetController {
     }
 
     @PostMapping("/pets/{petId}/edit")
-    public String processUpdateForm(Owner owner, Pet pet, @PathVariable Long petId, BindingResult result) {
+    public String processUpdateForm(@PathVariable Long ownerId, @ModelAttribute Pet pet, @PathVariable Long petId, BindingResult result) {
         if (result.hasErrors()) {
             return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
         }
+        Owner owner = ownerService.findById(ownerId);
         Optional<Pet> petOptional = owner.getPets().stream().filter(p -> p.getId().equals(petId)).findFirst();
         petOptional.ifPresent(p -> {
-            p.setName(pet.getName());
-            p.setBirthDate(pet.getBirthDate());
-            p.setType(pet.getType());
+            if(StringUtils.hasLength(pet.getName()))
+                p.setName(pet.getName());
+            if(Objects.nonNull(pet.getBirthDate()))
+                p.setBirthDate(pet.getBirthDate());
+            if(Objects.nonNull(pet.getType()))
+                p.setType(pet.getType());
             petService.save(p);
         });
 
