@@ -108,6 +108,16 @@ class OwnerControllerTest {
     }
 
     @Test
+    void processEmptyFindFormReturnMany() throws Exception {
+        Mockito.when(ownerService.findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString())).thenReturn(owners);
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/searchResults").param("lastName", " "))
+              .andExpect(MockMvcResultMatchers.model().attributeExists("selection"))
+              .andExpect(MockMvcResultMatchers.status().isOk())
+              .andExpect(MockMvcResultMatchers.view().name("owners/ownersList"));
+        Mockito.verify(ownerService, Mockito.times(1)).findByLastNameContainsIgnoreCase(ArgumentMatchers.anyString());
+    }
+
+    @Test
     void displayOwner() throws Exception {
         Owner owner = Owner.builder().id(1L).build();
         Mockito.when(ownerService.findById(ArgumentMatchers.anyLong())).thenReturn(owner);

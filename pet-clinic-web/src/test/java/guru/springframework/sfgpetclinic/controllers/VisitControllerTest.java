@@ -1,5 +1,6 @@
 package guru.springframework.sfgpetclinic.controllers;
 
+import guru.springframework.sfgpetclinic.formatters.LocalDateTimeFormatter;
 import guru.springframework.sfgpetclinic.model.Pet;
 import guru.springframework.sfgpetclinic.model.Visit;
 import guru.springframework.sfgpetclinic.services.PetService;
@@ -12,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.format.support.FormattingConversionService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -35,7 +37,9 @@ class VisitControllerTest {
 
     @BeforeEach
     void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(controller).build();
+        FormattingConversionService conversionService = new FormattingConversionService();
+        conversionService.addFormatter(new LocalDateTimeFormatter());
+        mvc = MockMvcBuilders.standaloneSetup(controller).setConversionService(conversionService).build();
     }
 
     @Test
@@ -61,10 +65,13 @@ class VisitControllerTest {
         Mockito.when(petService.findById(ArgumentMatchers.anyLong())).thenReturn(pet);
         Mockito.when(visitService.save(ArgumentMatchers.any(Visit.class))).thenReturn(visit);
         //Then
-        mvc.perform(MockMvcRequestBuilders.post("/owners/1/pets/1/visits/new"))
+        mvc.perform(MockMvcRequestBuilders.post("/owners/1/pets/1/visits/new")
+                        .param("id", "1")
+                        .param("petId", "2")
+                        .param("date", "2024-04-04T18:30")
+                        .param("description", "Just another visit"))
                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
-
         Mockito.verify(visitService, Mockito.times(1)).save(ArgumentMatchers.any(Visit.class));
     }
 }
